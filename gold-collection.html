@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+	<meta charset="utf-8" />
+	
+	<title>Simple 2D Gold Collection Collision Demo</title>
+	<script type="text/javascript" src="../crafty.js"></script>
+	<script type="text/javascript" src="../../../code/javascript/jquery.min.js"></script>
+	<script type="text/javascript" src="../../../code/javascript/jquery.dump.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+		
+		function generateGold()
+		{
+			for ( var i=0; i<20; i++ )
+			{
+				var tempX = Crafty.math.randomInt( 32, 378 );
+				var tempY = Crafty.math.randomInt( 32, 378 );
+					
+				Crafty.e( "Gold, 2D, DOM, Color,Collision" )
+					.color( '#ffc000' )
+					.attr( 
+						{ 
+							x:tempX, 
+							y:tempY, 
+							w:20, 
+							h:20 
+						} 
+					)
+					.onHit( 
+						"Player",
+						function()
+						{
+							Crafty( "GoldCount" ).each(
+								function()
+								{
+									this.text( "Gold: " +  ++this.gold );
+								}
+							);
+							
+							this.destroy();
+						}
+					);
+			}
+		}
+		
+		window.onload = function()
+		{
+			Crafty.init(400, 400);
+	
+			Crafty.e( "GoldCount, DOM, 2D, Text")
+				.attr( 
+					{ 
+						x:6,
+						y:6,
+						w:100,
+						h:20,
+						gold:0
+					}
+				)
+				.text( "Gold: 0" );
+				
+			Crafty.e( "Top, 2D, DOM, Color" )
+				.color( '#000000' )
+				.attr( 
+					{ 
+						x:2, 
+						y:0, 
+						w:396, 
+						h:2 
+					} 
+				);
+				
+			Crafty.e( "TopWall, Wall, 2D, DOM, Color" )
+				.color( '#000000' )
+				.attr( 
+					{ 
+						x:2, 
+						y:30, 
+						w:396, 
+						h:2 
+					} 
+				);
+				
+			Crafty.e( "BottomWall, Wall, 2D, DOM, Color" )
+				.color( '#000000' )
+				.attr( 
+					{ 
+						x:2, 
+						y:398, 
+						w:396, 
+						h:2 
+					} 
+				);
+				
+			Crafty.e( "LeftWall, Wall, 2D, DOM, Color" )
+				.color( '#000000' )
+				.attr( 
+					{ 
+						x:0, 
+						y:0, 
+						w:2, 
+						h:400 
+					} 
+				);
+				
+			Crafty.e( "RightWall, Wall, 2D, DOM, Color" )
+				.color( '#000000' )
+				.attr( 
+					{ 
+						x:398, 
+						y:0, 
+						w:2, 
+						h:400 
+					} 
+				);
+				
+			generateGold();
+					
+			Crafty.e( "Player, 2D, DOM, Color, Fourway, Collision" )
+				.color( '#7f7f7f' )
+				.attr( 
+					{ 
+						x:2, 
+						y:32, 
+						w:20, 
+						h:20 
+					}
+				)
+				.fourway( 1 )
+				.bind( 
+					"Moved", 
+					function( from )
+					{
+						if( this.hit( "Wall" ) )
+						{
+							this.attr( { x:from.x, y:from.y } );
+						}
+					}
+				);
+				
+		};
+	</script>
+</body>
+</html>
+
